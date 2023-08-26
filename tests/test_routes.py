@@ -175,3 +175,15 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         response_data = response.get_json()
         self.assertIn("could not be found", response_data["message"].lower())
+
+
+    def test_delete_account(self):
+        """It should Delete an Account"""
+        account = self._create_accounts(9)[0]
+        response = self.client.delete(f"{BASE_URL}/{account.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_method_not_allowed(self):
+        """It should not allow an illegal method call"""
+        response = self.client.delete(BASE_URL)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
